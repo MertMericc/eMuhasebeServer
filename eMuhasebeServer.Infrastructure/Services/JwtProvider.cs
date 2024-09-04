@@ -15,14 +15,15 @@ namespace eMuhasebeServer.Infrastructure.Services
         UserManager<AppUser> userManager,
         IOptions<JwtOptions> jwtOptions) : IJwtProvider
     {
-        public async Task<LoginCommandResponse> CreateToken(AppUser user)
+        public async Task<LoginCommandResponse> CreateToken(AppUser user,Guid? companyId)
         {
             List<Claim> claims = new()
             {
                 new Claim("Id", user.Id.ToString()),
                 new Claim("Name", user.FullName),
                 new Claim("Email", user.Email ?? ""),
-                new Claim("UserName", user.UserName ?? "")
+                new Claim("UserName", user.UserName ?? ""),
+                new Claim("CompanyId",companyId.ToString() ?? string.Empty)
             };
 
             DateTime expires = DateTime.UtcNow.AddMonths(1);

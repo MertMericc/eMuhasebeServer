@@ -10,5 +10,6 @@ namespace eMuhasebeServer.Domain.Entities
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpires { get; set; }
         public bool IsDeleted { get; set; }=false;
+        public List<CompanyUser>? CompanyUsers { get; set; }
     }
 }
