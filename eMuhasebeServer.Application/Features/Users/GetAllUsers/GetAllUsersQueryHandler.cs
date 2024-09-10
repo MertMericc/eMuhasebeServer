@@ -11,7 +11,11 @@ namespace eMuhasebeServer.Application.Features.Users.GetAllUsersQuery
     {
         public async Task<Result<List<AppUser>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-           List<AppUser> users = await userManager.Users.OrderBy(p=>p.FirstName).ToListAsync(cancellationToken);
+           List<AppUser> users = 
+                await userManager.Users
+                .Include(p=>p.CompanyUsers)
+                .OrderBy(p=>p.FirstName)
+                .ToListAsync(cancellationToken);
             return users;
         }
     }

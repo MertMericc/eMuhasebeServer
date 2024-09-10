@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eMuhasebeServer.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using eMuhasebeServer.Infrastructure.Context;
 namespace eMuhasebeServer.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240905091352_mg6")]
+    partial class mg6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,13 +143,18 @@ namespace eMuhasebeServer.Infrastructure.Migrations
 
             modelBuilder.Entity("eMuhasebeServer.Domain.Entities.CompanyUser", b =>
                 {
-                    b.Property<Guid>("AppUserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("AppUserId", "CompanyId");
+                    b.Property<Guid?>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "CompanyId");
+
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("CompanyId");
 
@@ -194,19 +202,15 @@ namespace eMuhasebeServer.Infrastructure.Migrations
 
             modelBuilder.Entity("eMuhasebeServer.Domain.Entities.CompanyUser", b =>
                 {
-                    b.HasOne("eMuhasebeServer.Domain.Entities.AppUser", "AppUser")
+                    b.HasOne("eMuhasebeServer.Domain.Entities.AppUser", null)
                         .WithMany("CompanyUsers")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("AppUserId");
 
                     b.HasOne("eMuhasebeServer.Domain.Entities.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AppUser");
 
                     b.Navigation("Company");
                 });
