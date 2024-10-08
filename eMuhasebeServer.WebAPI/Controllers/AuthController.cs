@@ -1,4 +1,5 @@
-﻿using eMuhasebeServer.Application.Features.Auth.ConfirmEmail;
+﻿using eMuhasebeServer.Application.Features.Auth.ChangeCompany;
+using eMuhasebeServer.Application.Features.Auth.ConfirmEmail;
 using eMuhasebeServer.Application.Features.Auth.Login;
 using eMuhasebeServer.Application.Features.Auth.SendConfirmEmail;
 using eMuhasebeServer.WebAPI.Abstractions;
@@ -31,6 +32,14 @@ namespace eMuhasebeServer.WebAPI.Controllers
 
         [HttpPost]
         public async Task<IActionResult> SendConfirmEmail(SendConfirmEmailCommand request, CancellationToken cancellationToken)
+        {
+            var response = await _mediator.Send(request, cancellationToken);
+            return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IActionResult> ChangeCompany(ChangeCompanyCommand request, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(request, cancellationToken);
             return StatusCode(response.StatusCode, response);

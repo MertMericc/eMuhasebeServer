@@ -48,19 +48,32 @@ namespace eMuhasebeServer.Application.Features.Auth.Login
                 return (500, "Şifreniz yanlış");
             }
 
-            List<CompanyUser> companies=await companyUserRepository
-                .Where(x=>x.AppUserId==user.Id)
-                .Include(x=>x.Company)
-                .ToListAsync(cancellationToken);
+            List<CompanyUser> companieUsers =
+              await companyUserRepository
+              .Where(p => p.AppUserId == user.Id)
+              .Include(p => p.Company)
+              .ToListAsync(cancellationToken);
+
+
+            List<Company> companies = new();
 
             Guid? companyId = null;
-            if (companies.Count>0)
+
+            if (companieUsers.Count > 0)
             {
-                companyId = companies.First().CompanyId;
+                companyId = companieUsers.First().CompanyId;
+
+                companies = companieUsers.Select(s => new Company
+                {
+                    Id = s.CompanyId,
+                    Name = s.Company!.Name,
+                    TaxDepartment = s.Company!.TaxDepartment,
+                    TaxNumber = s.Company!.TaxNumber,
+                    FullAddress = s.Company!.FullAddress
+                }).ToList();
             }
 
-            var loginResponse = await jwtProvider.CreateToken(user, companyId);
-
+            var loginResponse = await jwtProvider.CreateToken(user, companyId, companies);
 
             return loginResponse;
         }

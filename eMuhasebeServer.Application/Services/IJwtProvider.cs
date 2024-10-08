@@ -5,6 +5,6 @@ namespace eMuhasebeServer.Application.Services
 {
     public interface IJwtProvider
     {
-        Task<LoginCommandResponse> CreateToken(AppUser user,Guid? companyId);
+        Task<LoginCommandResponse> CreateToken(AppUser user,Guid? companyId,List<Company> companies);
     }
 }
