@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using eMuhasebeServer.Application.Services;
 using eMuhasebeServer.Domain.Entities;
 using eMuhasebeServer.Domain.Events;
 using eMuhasebeServer.Domain.Repositories;
@@ -10,6 +11,7 @@ using TS.Result;
 
 namespace eMuhasebeServer.Application.Features.Users.UpdateUser;
 internal sealed class UpdateUserCommandHandler(
+     ICacheService cacheService,
       IMediator mediator,
        UserManager<AppUser> userManager,
        ICompanyUserRepository companyUserRepository,
@@ -80,7 +82,9 @@ internal sealed class UpdateUserCommandHandler(
                 CompanyId=s
             }).ToList();
 
-            if (isMailChanged)
+        cacheService.Remove("users");
+
+        if (isMailChanged)
             {
                 await mediator.Publish(new AppUserEvent(appUser.Id));
             }
