@@ -11,5 +11,6 @@ namespace eMuhasebeServer.Domain.Entities
         public DateTime? RefreshTokenExpires { get; set; }
         public bool IsDeleted { get; set; }=false;
         public List<CompanyUser>? CompanyUsers { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }
